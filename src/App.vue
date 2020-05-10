@@ -120,6 +120,10 @@ export default {
 
 <style lang="scss">
 $primary: #aa0088;
+$danger: #c0392b;
+$info: #3498db;
+$success: #2ecc71;
+$warning: #f1c40f;
 
 @import "~bootswatch/dist/solar/variables";
 @import "~bootstrap/scss/bootstrap";

@@ -30,6 +30,24 @@ export default {
     },
     apiGetItemImage: function (itemId, onSuccess, onError) {
       return this.axios({ url: `item/${itemId}/image`, method: 'GET', success: onSuccess, error: onError })
+    },
+    apiGetRatingCategories: function (categoryId, onSuccess, onError) {
+      return this.axios({ url: `category/${categoryId}/rating`, method: 'GET', success: onSuccess, error: onError })
+    },
+    putItemRating: function (rating, onSuccess, onError) {
+      return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'PUT', data: rating, success: onSuccess, error: onError })
+    },
+    deleteItemRating: function (rating, onSuccess, onError) {
+      return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'DELETE', data: rating, success: onSuccess, error: onError })
+    },
+    postRatingCategory: function (categoryId, ratingCategory, onSuccess, onError) {
+      return this.axios({ url: `category/${categoryId}/rating`, method: 'POST', data: ratingCategory, success: onSuccess, error: onError })
+    },
+    apiDeleteImage: function (imageId, image, onSuccess, onError) {
+      return this.axios({ url: `image/${imageId}`, method: 'DELETE', data: image, success: onSuccess, error: onError })
+    },
+    apiPostItemImage: function (itemId, formData, onSuccess, onError) {
+      return this.axios({ url: `item/${itemId}/image`, method: 'POST', formData: formData, success: onSuccess, error: onError })
     }
   }
 }

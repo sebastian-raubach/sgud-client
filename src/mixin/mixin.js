@@ -20,19 +20,30 @@ export default {
           requestData = data
         }
       }
-  
-      const promise = axios({
-        url: url,
-        method: method,
-        data: requestData,
-        formData: formData,
-        params: requestParams,
-        crossDomain: true,
-        responseType: dataType,
-        headers: {
-          'Content-Type': contentType
-        }
-      })
+
+      var promise
+
+      if (formData) {
+        promise = axios.post(url, formData, {
+          crossDomain: true,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+      } else {
+        promise = axios({
+          url: url,
+          method: method,
+          data: requestData,
+          formData: formData,
+          params: requestParams,
+          crossDomain: true,
+          responseType: dataType,
+          headers: {
+            'Content-Type': contentType
+          }
+        })
+      }
   
       promise.then(result => {
         if (success) {
