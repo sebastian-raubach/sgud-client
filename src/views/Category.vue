@@ -1,6 +1,8 @@
 <template>
   <div v-if="category">
-    <h1 class="text-primary"><i :class="`mdi mdi-32px ${category.icon}`" /> {{ category.name }}<template v-if="category.description"> - <small>{{ category.description }}</small></template></h1>
+    <h1 class="text-primary">
+      <i :class="`mdi mdi-32px ${category.icon}`" /> {{ category.name }}<template v-if="category.description"> - <small>{{ category.description }}</small></template>
+    </h1>
     <hr/>
     <ItemTable :categoryId="category.id" v-on:item-selected="(selectedId) => itemId = selectedId" ref="itemTable"/>
     <ItemDetails v-if="itemId" :itemId="itemId" v-on:rating-changed="$refs.itemTable.refresh()" />

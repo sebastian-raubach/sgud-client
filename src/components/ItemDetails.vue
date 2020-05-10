@@ -6,8 +6,9 @@
     <b-card-body>
       <b-card-title class="text-primary">{{ item.itemName }}</b-card-title>
       <b-card-sub-title>{{ item.itemDescription }}</b-card-sub-title>
-      <b-card-text><i class="mdi mdi-tag-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
-      <b-card-text><i class="mdi mdi-factory" /> {{ item.manufacturerName }}<span v-if="item.manufacturerDescription" class="text-muted"> - {{ item.manufacturerDescription }}</span></b-card-text>
+      <b-card-text v-if="item.typeName"><i class="mdi mdi-tag-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
+      <b-card-text v-if="item.manufacturerName"><i class="mdi mdi-factory" /> {{ item.manufacturerName }}<span v-if="item.manufacturerDescription" class="text-muted"> - {{ item.manufacturerDescription }}</span></b-card-text>
+      <b-card-text v-if="item.sourceName"><i class="mdi mdi-store" /> {{ item.sourceName }}<span v-if="item.sourceDescription" class="text-muted"> - {{ item.sourceDescription }}</span></b-card-text>
     </b-card-body>
 
     <RatingTable :item="item" v-on:rating-changed="$emit('rating-changed')" />

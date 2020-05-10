@@ -22,8 +22,8 @@
       <b-row>
         <b-col cols="12" md="3">
           <b-list-group>
-            <b-list-group-item variant="primary"
-                               class="d-flex justify-content-between align-items-center"
+            <b-list-group-item :variant="`${category.id === $route.params.categoryId ? 'primary' : 'default'}`"
+                               :class="`d-flex justify-content-between align-items-center ${category.id === $route.params.categoryId ? 'active' : ''}`"
                                v-for="category in categories"
                                :key="`category-${category.id}`"
                                :to="{ name: 'category', params: { categoryId: category.id } }">
@@ -120,10 +120,10 @@ export default {
 
 <style lang="scss">
 $primary: #aa0088;
-$danger: #c0392b;
-$info: #3498db;
-$success: #2ecc71;
-$warning: #f1c40f;
+$danger: #ED4C67;
+$info: #12CBC4;
+$success: #A3CB38;
+$warning: #FFC312;
 
 @import "~bootswatch/dist/solar/variables";
 @import "~bootstrap/scss/bootstrap";

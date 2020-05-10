@@ -11,6 +11,7 @@
              @row-clicked="onRowClicked"
              :items="getData"
              :fields="fields"
+             :tbody-tr-class="getRowClass"
              ref="table">
       <template v-slot:cell(selected)="data">
         <i :class="`mdi ${data.item.itemId === selectedItemId ? 'mdi-checkbox-marked-circle-outline' : 'mdi-checkbox-blank-circle-outline'}`" />
@@ -67,6 +68,13 @@ export default {
     }
   },
   methods: {
+    getRowClass: function (item) {
+      if (item) {
+        return this.selectedItemId === item.itemId ? 'table-primary' : null
+      } else {
+        return null
+      }
+    },
     onRowClicked: function (item) {
       this.selectedItemId = item.itemId
       this.$emit('item-selected', item.itemId)
