@@ -14,6 +14,16 @@ const router = new Router({
       path: '/cagegory/:categoryId',
       name: 'category',
       component: () => import(/* webpackChunkName: "category" */ './views/Category.vue')
+    },
+    {
+      path: '/cagegory/:categoryId/heatmap',
+      name: 'category-heatmap',
+      component: () => import(/* webpackChunkName: "category-heatmap" */ './views/CategoryHeatmap.vue')
+    },
+    {
+      path: '/cagegory/:categoryId/:itemId',
+      name: 'category-item',
+      component: () => import(/* webpackChunkName: "category" */ './views/Category.vue')
     }
   ]
 })

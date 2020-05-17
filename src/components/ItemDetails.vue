@@ -1,11 +1,14 @@
 <template>
   <b-card v-if="item"
+          bg-variant="dark"
           no-body
+          :header="item.itemName"
+          header-text-variant="primary"
+          header-tag="h3"
           :title="item.itemName"
           :sub-title="item.itemDescription">
     <b-card-body>
-      <b-card-title class="text-primary">{{ item.itemName }}</b-card-title>
-      <b-card-sub-title>{{ item.itemDescription }}</b-card-sub-title>
+      <b-card-sub-title class="mb-3">{{ item.itemDescription }}</b-card-sub-title>
       <b-card-text v-if="item.typeName"><i class="mdi mdi-tag-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
       <b-card-text v-if="item.manufacturerName"><i class="mdi mdi-factory" /> {{ item.manufacturerName }}<span v-if="item.manufacturerDescription" class="text-muted"> - {{ item.manufacturerDescription }}</span></b-card-text>
       <b-card-text v-if="item.sourceName"><i class="mdi mdi-store" /> {{ item.sourceName }}<span v-if="item.sourceDescription" class="text-muted"> - {{ item.sourceDescription }}</span></b-card-text>
@@ -14,7 +17,7 @@
     <RatingTable :item="item" v-on:rating-changed="$emit('rating-changed')" />
 
     <b-carousel
-      v-if="images"
+      v-if="images && images.length > 0"
       v-model="imagePage"
       controls
       :interval="0"
@@ -25,9 +28,11 @@
 
       <b-carousel-slide v-for="page in getImagePages()" :key="`image-page-${page}`">
         <template v-slot:img>
-          <b-row>
+          <b-row class="image-carousel-row">
             <b-col cols=4 v-for="image in getImagesOnPage(page - 1)" :key="`image-${page}-${image.id}`" class="d-flex flex-column px-0 mx-0">
-              <img class="item-image d-block img-fluid w-100" :src="`${baseUrl}image/${image.id}/src?size=MEDIUM`">
+              <a :href="`${baseUrl}image/${image.id}/src?size=ORIGINAL`" class="baguettebox" @click.prevent>
+                <img class="item-image d-block img-fluid w-100" :src="`${baseUrl}image/${image.id}/src?size=MEDIUM`">
+              </a>
               <b-button variant="danger" @click="deleteImage(image.id)"><i class="mdi mdi-delete"/></b-button>
             </b-col>
           </b-row>
@@ -40,7 +45,7 @@
         class="mt-3"
         v-model="imageFile"
         :state="Boolean(imageFile)"
-        accept=".jpg .jpeg"
+        accept=".jpg, .jpeg"
         placeholder="Choose a file or drop it here..."
         drop-placeholder="Drop file here..." />
       <b-button type="submit" @click="uploadImage"><i class="mdi mdi-upload"/> Upload</b-button>
@@ -50,6 +55,7 @@
 
 <script>
 import RatingTable from '@/components/tables/RatingTable'
+import baguetteBox from 'baguettebox.js'
 
 export default {
   props: {
@@ -74,7 +80,8 @@ export default {
       item: null,
       images: null,
       imagePage: 0,
-      imageFile: null
+      imageFile: null,
+      baguetteBox: null
     }
   },
   components: {
@@ -82,14 +89,17 @@ export default {
   },
   methods: {
     uploadImage: function () {
-      let formData = new FormData()
-      formData.append('imageFile', this.imageFile)
+      if (this.imageFile) {
+        let formData = new FormData()
+        formData.append('imageFile', this.imageFile)
 
-      this.apiPostItemImage(this.item.itemId, formData, result => {
-        if (result) {
-          this.updateImages()
-        }
-      })
+        this.apiPostItemImage(this.item.itemId, formData, result => {
+          if (result) {
+            this.updateImages()
+            this.imageFile = null
+          }
+        })
+      }
     },
     deleteImage: function (imageId) {
       this.apiDeleteImage(imageId, {
@@ -114,7 +124,7 @@ export default {
         filter: []
       }
 
-      this.apiPostItem(value, request, result => {
+      this.apiPostItemView(value, request, result => {
         if (result && result.data && result.data.length > 0) {
           this.item = result.data[0]
         } else {
@@ -125,7 +135,19 @@ export default {
     updateImages: function () {
       if (this.item) {
         this.apiGetItemImage(this.item.itemId, result => {
+          if (this.baguetteBox) {
+            baguetteBox.destroy()
+          }
+
           this.images = result
+
+          this.$nextTick(() => {
+            this.baguetteBox = baguetteBox.run('.image-carousel-row', {
+              captions: false,
+              fullScreen: false,
+              filter: /.*\/image.*/i
+            })
+          })
         })
       } else {
         this.images = null

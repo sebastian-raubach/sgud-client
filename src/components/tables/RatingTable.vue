@@ -15,7 +15,7 @@
         <b-form-rating v-model="data.item.rating" inline stars="5" precision="2" @change="evt => onChange(evt, data.item)" />
       </template>
       <template v-slot:cell(delete)="data">
-        <b-button variant="danger" @click="deleteRating(data.item)"><i class="mdi mdi-delete" /></b-button>
+        <b-button variant="outline-danger" @click="deleteRating(data.item)"><i class="mdi mdi-delete" /></b-button>
       </template>
     </b-table>
     <b-button-group class="mb-3">
@@ -43,13 +43,16 @@ export default {
     return {
       fields: [{
         key: 'ratingCategoryName',
-        label: 'Rating category name'
+        label: 'Rating category name',
+        sortable: true
       }, {
         key: 'ratingCategoryDescription',
-        label: 'Rating category description'
+        label: 'Rating category description',
+        sortable: true
       }, {
         key: 'rating',
         label: 'Rating',
+        sortable: true,
         class: 'text-right'
       }, {
         key: 'delete',
@@ -60,7 +63,15 @@ export default {
       pagination: {
         currentPage: 1,
         perPage: 10,
-        totalCount: 0
+        totalCount: -1
+      }
+    }
+  },
+  watch: {
+    item: {
+      immediate: true,
+      handler: function () {
+        this.refresh()
       }
     }
   },
@@ -87,7 +98,7 @@ export default {
       })
     },
     refresh: function () {
-      this.$refs.table.refresh()
+      this.$nextTick(() => this.$refs.table.refresh())
     },
     onChange: function (evt, item) {
       this.apiPatchItemRating(item.itemId, item.ratingCategoryId, item, result => {
@@ -113,15 +124,8 @@ export default {
       delete localCtx.currentPage
       delete localCtx.perPage
 
-      const request = {
-        page: this.pagination.currentPage,
-        limit: this.pagination.perPage,
-        prevCount: -1,
-        filter: this.filter
-      }
-
       return new Promise((resolve) => {
-        this.apiPostItemRatings(this.item.itemId, request).then(result => {
+        this.apiPostItemRatings(this.item.itemId, localCtx).then(result => {
           var localResult = null
           if (result && result.data && result.data.data) {
             this.pagination.totalCount = result.data.count

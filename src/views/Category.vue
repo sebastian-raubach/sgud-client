@@ -4,7 +4,8 @@
       <i :class="`mdi mdi-32px ${category.icon}`" /> {{ category.name }}<template v-if="category.description"> - <small>{{ category.description }}</small></template>
     </h1>
     <hr/>
-    <ItemTable :categoryId="category.id" v-on:item-selected="(selectedId) => itemId = selectedId" ref="itemTable"/>
+    <b-button :to="{ name: 'category-heatmap', params: { categoryId: category.id } }" class="mb-3">Show item heatmap</b-button>
+    <ItemTable :categoryId="category.id" :selected="itemId" v-on:item-selected="(selectedId) => itemId = selectedId" ref="itemTable"/>
     <ItemDetails v-if="itemId" :itemId="itemId" v-on:rating-changed="$refs.itemTable.refresh()" />
   </div>
 </template>
@@ -25,7 +26,8 @@ export default {
     ItemTable
   },
   mounted: function () {
-    var categoryId = this.$route.params.categoryId
+    var categoryId = parseInt(this.$route.params.categoryId)
+    this.itemId = parseInt(this.$route.params.itemId)
 
     this.apiGetCategory(categoryId, result => {
       if (result && result.length > 0) {

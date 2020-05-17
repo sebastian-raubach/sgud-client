@@ -23,6 +23,7 @@ axiosDefaults.baseURL = baseUrl
 
 store.commit('ON_BASE_URL_CHANGED_MUTATION', baseUrl)
 
+import 'vue-search-select/dist/VueSearchSelect.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@mdi/font/css/materialdesignicons.min.css'
 

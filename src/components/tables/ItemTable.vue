@@ -1,5 +1,5 @@
 <template>
-  <div v-if="categoryId">
+  <div v-if="categoryId" class="item-table">
     <b-table striped
              responsive
              hover
@@ -7,7 +7,7 @@
              show-empty
              table-variant="dark"
              sort-icon-left
-             class="item-table"
+             class="mb-0"
              @row-clicked="onRowClicked"
              :items="getData"
              :fields="fields"
@@ -16,21 +16,39 @@
       <template v-slot:cell(selected)="data">
         <i :class="`mdi ${data.item.itemId === selectedItemId ? 'mdi-checkbox-marked-circle-outline' : 'mdi-checkbox-blank-circle-outline'}`" />
       </template>
+      <template v-slot:cell(typeName)="data">
+        {{ data.item.typeName }} <i :class="`mdi ${data.item.typeIcon}`" v-if="data.item.typeIcon" />
+      </template>
+      <template v-slot:cell(manufacturerName)="data">
+        <span v-if="data.item.manufacturerUrl"><a :href="data.item.manufacturerUrl">{{ data.item.manufacturerName }}</a> <i class="mdi mdi-open-in-new" /></span>
+        <span v-else>{{ data.item.manufacturerName }}</span>
+      </template>
       <template v-slot:cell(avgItemRating)="data">
-        <b-form-rating v-model="data.item.avgItemRating" no-border inline stars="5" precision="2" readonly />
+        <b-form-rating v-model="data.item.avgItemRating" no-border inline stars="5" :show-value="data.item.avgItemRating !== undefined" precision="1" readonly />
       </template>
     </b-table>
+    <b-button-group class="mb-3">
+      <b-button @click="$refs.itemModal.show()"><i class="mdi mdi-plus" /></b-button>
+    </b-button-group>
     <b-pagination v-model="pagination.currentPage"
                   :per-page="pagination.perPage"
                   :total-rows="pagination.totalCount"
                   v-show="pagination.totalCount > pagination.perPage" />
+    <ItemModal ref="itemModal" :categoryId="categoryId" v-on:item-added="onItemAdded" />
   </div>
 </template>
 
 <script>
+import { EventBus } from '@/event-bus.js'
+import ItemModal from '@/components/modals/ItemModal'
+
 export default {
   props: {
     categoryId: {
+      type: Number,
+      default: null
+    },
+    selected: {
       type: Number,
       default: null
     }
@@ -51,7 +69,7 @@ export default {
         sortable: true
       }, {
         key: 'manufacturerName',
-        label: 'Producer',
+        label: 'Manufacturer',
         sortable: true
       }, {
         key: 'avgItemRating',
@@ -63,11 +81,18 @@ export default {
       pagination: {
         currentPage: 1,
         perPage: 10,
-        totalCount: 0
+        totalCount: -1
       }
     }
   },
+  components: {
+    ItemModal
+  },
   methods: {
+    onItemAdded: function () {
+      this.$refs.table.refresh()
+      EventBus.$emit('item-added')
+    },
     getRowClass: function (item) {
       if (item) {
         return this.selectedItemId === item.itemId ? 'table-primary' : null
@@ -98,15 +123,8 @@ export default {
       delete localCtx.currentPage
       delete localCtx.perPage
 
-      const request = {
-        page: this.pagination.currentPage,
-        limit: this.pagination.perPage,
-        prevCount: -1,
-        filter: this.filter
-      }
-
       return new Promise((resolve) => {
-        this.apiPostCategoryItems(this.categoryId, request).then(result => {
+        this.apiPostCategoryItems(this.categoryId, localCtx).then(result => {
           var localResult = null
           if (result && result.data && result.data.data) {
             this.pagination.totalCount = result.data.count
@@ -118,15 +136,22 @@ export default {
         })
       })
     }
+  },
+  mounted: function () {
+    this.selectedItemId = this.selected
   }
 }
 </script>
 
 <style>
-.item-table tr:hover {
+.item-table table tr:hover {
   cursor: pointer;
 }
-.item-table tr .b-rating:hover {
+.item-table table tr .b-rating:hover {
   cursor: default;
+}
+.item-table .btn-group .btn {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 </style>

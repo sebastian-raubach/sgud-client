@@ -13,9 +13,12 @@ export default {
       query.page--
       return this.axios({ url: 'item', method: 'POST', data: query, success: onSuccess, error: onError })
     },
-    apiPostItem: function (itemId, query, onSuccess, onError) {
+    apiPostItemView: function (itemId, query, onSuccess, onError) {
       query.page--
       return this.axios({ url: `item/${itemId}`, method: 'POST', data: query, success: onSuccess, error: onError })
+    },
+    apiPostItem: function (item, onSuccess, onError) {
+      return this.axios({ url: 'item', method: 'POST', data: item, success: onSuccess, error: onError })
     },
     apiPostCategoryItems: function (categoryId, query, onSuccess, onError) {
       query.page--
@@ -34,8 +37,14 @@ export default {
     apiGetRatingCategories: function (categoryId, onSuccess, onError) {
       return this.axios({ url: `category/${categoryId}/rating`, method: 'GET', success: onSuccess, error: onError })
     },
+    apiGetRatingHeatmap: function (categoryId, onSuccess, onError) {
+      return this.axios({ url: `category/${categoryId}/heatmap`, method: 'GET', success: onSuccess, error: onError })
+    },
     putItemRating: function (rating, onSuccess, onError) {
       return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'PUT', data: rating, success: onSuccess, error: onError })
+    },
+    putItemRatings: function (itemId, rating, onSuccess, onError) {
+      return this.axios({ url: `item/${itemId}/rating`, method: 'PUT', data: rating, success: onSuccess, error: onError })
     },
     deleteItemRating: function (rating, onSuccess, onError) {
       return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'DELETE', data: rating, success: onSuccess, error: onError })
@@ -48,6 +57,18 @@ export default {
     },
     apiPostItemImage: function (itemId, formData, onSuccess, onError) {
       return this.axios({ url: `item/${itemId}/image`, method: 'POST', formData: formData, success: onSuccess, error: onError })
+    },
+    apiGetItemType: function (categoryId, onSuccess, onError) {
+      return this.axios({ url: `category/${categoryId}/type`, method: 'GET', success: onSuccess, error: onError })
+    },
+    apiGetManufacturers: function (onSuccess, onError) {
+      return this.axios({ url: 'manufacturer', method: 'GET', success: onSuccess, error: onError })
+    },
+    apiPostManufacturer: function (manufacturer, onSuccess, onError) {
+      return this.axios({ url: 'manufacturer', method: 'POST', data: manufacturer, success: onSuccess, error: onError })
+    },
+    apiPostItemType: function (itemType, onSuccess, onError) {
+      return this.axios({ url: 'type', method: 'POST', data: itemType, success: onSuccess, error: onError })
     }
   }
 }

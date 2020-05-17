@@ -1,18 +1,18 @@
 <template>
   <div>
     <b-modal ref="modal"
-            modal-class="rating-modal"
-            ok-title="Add"
-            cancel-title="Cancel"
-            title="Add rating"
-            @ok="onSubmit">
+             modal-class="rating-modal"
+             ok-title="Add"
+             cancel-title="Cancel"
+             title="Add rating"
+             @ok="onSubmit">
       <b-form @submit.prevent="onSubmit">
         <b-form-group label-for="category" label="Rating category">
           <b-input-group>
             <template v-slot:append>
               <b-button @click="$refs.categoryModal.show()" v-b-tooltip="'Add new rating category.'"><i class="mdi mdi-plus" /></b-button>
             </template>
-            <b-form-select id="category" v-model="selectedCategory" :options="ratingCategories" />
+            <ModelSelect id="category" v-model="selectedCategory" :options="ratingCategories" />
           </b-input-group>
           <b-form-rating v-model="rating" no-border />
         </b-form-group>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { ModelSelect } from 'vue-search-select'
 import RatingCategoryModal from '@/components/modals/RatingCategoryModal'
 
 export default {
@@ -40,6 +41,7 @@ export default {
     }
   },
   components: {
+    ModelSelect,
     RatingCategoryModal
   },
   methods: {
@@ -50,7 +52,7 @@ export default {
         description: category.description
       }, result => {
         if (result) {
-          this.updateCategories()
+          this.updateCategories(result)
         }
       })
     },
@@ -71,7 +73,7 @@ export default {
       
       this.$refs.modal.hide()
     },
-    updateCategories: function () {
+    updateCategories: function (idToSelect) {
       this.apiGetRatingCategories(this.categoryId, result => {
         if (result && result.length > 0) {
           this.ratingCategories = result.map(c => {
@@ -80,7 +82,12 @@ export default {
               text: c.name
             }
           })
-          this.selectedCategory = this.ratingCategories[0].value
+
+          if (idToSelect) {
+            this.selectedCategory = idToSelect
+          } else {
+            this.selectedCategory = this.ratingCategories[0].value
+          }
         }
       })
     }
@@ -89,7 +96,7 @@ export default {
 </script>
 
 <style>
-.rating-modal form select,
+.rating-modal form .ui.selection.dropdown,
 .rating-modal form .btn {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
