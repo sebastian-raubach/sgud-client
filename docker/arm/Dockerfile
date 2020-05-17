@@ -1,4 +1,4 @@
-FROM arm32v7/tomcat:8-jre8
+FROM arm32v7/tomcat:8-jre11
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
@@ -29,12 +29,12 @@ RUN apt-get install -y build-essential && \
 
 # Download Gradle and build the server code
 RUN apt-get update && \
-    apt-get install -y wget openjdk-8-jdk && \
+    apt-get install -y wget openjdk-11-jdk && \
     wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip -P /tmp/ && \
     unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
     echo "data.directory.external=/data/sgud" > /opt/sgud-server/config.properties && \
     echo "project.name=sgud" >> /opt/sgud-server/gradle.properties && \
-    echo "org.gradle.jvmargs=-Xmx1536m -Xms512m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap" >> /opt/sgud-server/gradle.properties && \
+    echo "org.gradle.jvmargs=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:+UseContainerSupport -XX:+MaxRAMPercentage=90.0" >> /opt/sgud-server/gradle.properties && \
     /opt/gradle-6.0.1/bin/gradle --no-rebuild --stacktrace --max-workers=1 -p /opt/sgud-server war && \
     mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT && \
