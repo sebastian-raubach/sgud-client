@@ -8,7 +8,7 @@ COPY qemu-arm-static /usr/bin/qemu-arm-static
 RUN apt-get update && \
     apt-get install -y git && \
     git clone https://github.com/sebastian-raubach/sgud-server.git /opt/sgud-server && \
-    git clone https://github.com/sebastian-raubach/sgud-vue.git /opt/sgud-client
+    git clone https://github.com/sebastian-raubach/sgud-client.git /opt/sgud-client
 
 # Install node.js
 RUN apt-get update && \
