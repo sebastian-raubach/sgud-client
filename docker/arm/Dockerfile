@@ -29,13 +29,15 @@ RUN apt-get install -y build-essential && \
 
 # Download Gradle and build the server code
 RUN apt-get update && \
-    apt-get install -y wget openjdk-8-jdk gradle && \
+    apt-get install -y wget openjdk-8-jdk && \
+    wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip -P /tmp/ && \
+    unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
     echo "data.directory.external=/data/sgud" > /opt/sgud-server/config.properties && \
     echo "project.name=sgud" >> /opt/sgud-server/gradle.properties && \
-    echo "org.gradle.jvmargs=-Xmx1536m -Xms512m -XX:+HeapDumpOnOutOfMemoryError" >> /opt/sgud-server/gradle.properties && \
-    gradle --no-daemon --no-rebuild --stacktrace --debug --max-workers=1 -p /opt/sgud-server war && \
+    echo "org.gradle.jvmargs=-Xmx1536m -Xms512m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap" >> /opt/sgud-server/gradle.properties && \
+    /opt/gradle-6.0.1/bin/gradle --no-rebuild --stacktrace --max-workers=1 -p /opt/sgud-server war && \
     mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT && \
-    cp /opt/sgud-server/build/libs/sgud-1.0.0.war /usr/local/tomcat/webapps/ROOT.war
+    cp /opt/sgud-server/build/libs/sgud-server-1.0.0.war /usr/local/tomcat/webapps/ROOT.war
 
 WORKDIR /
