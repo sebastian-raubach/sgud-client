@@ -34,7 +34,7 @@ RUN apt-get update && \
     unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
     echo "data.directory.external=/data/sgud" > /opt/sgud-server/config.properties && \
     echo "project.name=sgud" >> /opt/sgud-server/gradle.properties && \
-    echo "org.gradle.jvmargs=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:+UseContainerSupport -XX:+MaxRAMPercentage=90.0" >> /opt/sgud-server/gradle.properties && \
+    echo "org.gradle.jvmargs=-XX:+UseContainerSupport -XX:MaxRAMPercentage=90.0" >> /opt/sgud-server/gradle.properties && \
     /opt/gradle-6.0.1/bin/gradle --no-rebuild --stacktrace --max-workers=1 -p /opt/sgud-server war && \
     mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT && \
