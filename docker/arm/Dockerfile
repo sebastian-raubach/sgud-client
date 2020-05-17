@@ -33,7 +33,7 @@ RUN apt-get update && \
     echo "data.directory.external=/data/sgud" > /opt/sgud-server/config.properties && \
     echo "project.name=sgud" >> /opt/sgud-server/gradle.properties && \
     echo "org.gradle.jvmargs=-Xmx1536m -Xms512m -XX:+HeapDumpOnOutOfMemoryError" >> /opt/sgud-server/gradle.properties && \
-    gradle --no-daemon --no-rebuild --max-workers=1 -p /opt/sgud-server war && \
+    gradle --no-daemon --no-rebuild --stacktrace --debug --max-workers=1 -p /opt/sgud-server war && \
     mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT && \
     cp /opt/sgud-server/build/libs/sgud-1.0.0.war /usr/local/tomcat/webapps/ROOT.war
