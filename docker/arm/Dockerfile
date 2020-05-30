@@ -41,6 +41,6 @@ LABEL maintainer="sebastian@raubach.co.uk"
 RUN mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT
 
-COPY --from=builder /opt/sgud-server/ROOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /opt/sgud-server/build/libs/sgud-server-1.0.0.war /usr/local/tomcat/webapps/ROOT.war
 
 WORKDIR /usr/local/tomcat/
