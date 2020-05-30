@@ -2,8 +2,6 @@ FROM node:12-alpine3.10 AS builder
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
-COPY qemu-arm-static /usr/bin/qemu-arm-static
-
 ARG BRANCH=master
 
 # Force docker to not cache the next line
