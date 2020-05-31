@@ -34,7 +34,7 @@ RUN apk add --no-cache openjdk8 && \
 
 
 
-FROM tomcat:8-jdk8
+FROM arm32v7/tomcat:8-jre8
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
