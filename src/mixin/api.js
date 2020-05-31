@@ -49,6 +49,9 @@ export default {
     deleteItemRating: function (rating, onSuccess, onError) {
       return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'DELETE', data: rating, success: onSuccess, error: onError })
     },
+    apiDeleteItem: function (itemId, onSuccess, onError) {
+      return this.axios({ url: `item/${itemId}`, method: 'DELETE', success: onSuccess, error: onError })
+    },
     postRatingCategory: function (categoryId, ratingCategory, onSuccess, onError) {
       return this.axios({ url: `category/${categoryId}/rating`, method: 'POST', data: ratingCategory, success: onSuccess, error: onError })
     },
@@ -63,6 +66,12 @@ export default {
     },
     apiGetManufacturers: function (onSuccess, onError) {
       return this.axios({ url: 'manufacturer', method: 'GET', success: onSuccess, error: onError })
+    },
+    apiGetSources: function (onSuccess, onError) {
+      return this.axios({ url: 'source', method: 'GET', success: onSuccess, error: onError })
+    },
+    apiPostSource: function (source, onSuccess, onError) {
+      return this.axios({ url: 'source', method: 'POST', data: source, success: onSuccess, error: onError })
     },
     apiPostManufacturer: function (manufacturer, onSuccess, onError) {
       return this.axios({ url: 'manufacturer', method: 'POST', data: manufacturer, success: onSuccess, error: onError })

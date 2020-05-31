@@ -32,6 +32,14 @@
                 <ModelSelect id="manufacturer" v-model="selectedManufacturer" :options="itemManufacturers" required />
               </b-input-group>
             </b-form-group>
+            <b-form-group label-for="source" label="Item source">
+              <b-input-group>
+                <template v-slot:append>
+                  <b-button @click="$refs.sourceModal.show()" v-b-tooltip="'Add new item source.'"><i class="mdi mdi-plus" /></b-button>
+                </template>
+                <ModelSelect id="source" v-model="selectedSource" :options="itemSources" required />
+              </b-input-group>
+            </b-form-group>
           </b-col>
           <b-col cols="12" md="6" v-if="ratingCategories && ratingCategories.length > 0">
             <b-form-group v-for="rating in ratingCategories" :key="`rating-category-${rating.id}`" :label-for="`rating-${rating.id}`" :label="rating.name">
@@ -43,12 +51,14 @@
     </b-modal>
     <ItemTypeModal ref="itemTypeModal" :categoryId="categoryId" v-on:item-type-added="updateItemTypes" />
     <ManufacturerModal ref="manufacturerModal" v-on:manufacturer-added="updateManufacturers" />
+    <SourceModal ref="sourceModal" v-on:source-added="updateSources" />
   </div>
 </template>
 
 <script>
 import ItemTypeModal from '@/components/modals/ItemTypeModal'
 import ManufacturerModal from '@/components/modals/ManufacturerModal'
+import SourceModal from '@/components/modals/SourceModal'
 import { ModelSelect } from 'vue-search-select'
 
 export default {
@@ -68,14 +78,15 @@ export default {
       selectedManufacturer: null,
       ratingCategories: [],
       selectedRatings: {},
-      sources: [],
+      itemSources: [],
       selectedSource: null
     }
   },
   components: {
     ItemTypeModal,
     ModelSelect,
-    ManufacturerModal
+    ManufacturerModal,
+    SourceModal
   },
   methods: {
     show: function () {
@@ -85,6 +96,7 @@ export default {
       this.$refs.modal.show()
       this.updateItemTypes()
       this.updateManufacturers()
+      this.updateSources()
 
       this.apiGetRatingCategories(this.categoryId, result => {
         this.ratingCategories = result
@@ -137,6 +149,24 @@ export default {
             this.selectedManufacturer = idToSelect
           } else {
             this.selectedManufacturer = this.itemManufacturers[0].value
+          }
+        }
+      })
+    },
+    updateSources: function (idToSelect) {
+      this.apiGetSources(result => {
+        if (result && result.length > 0) {
+          this.itemSources = result.map(s => {
+            return {
+              value: s.id,
+              text: s.name
+            }
+          })
+
+          if (idToSelect) {
+            this.selectedSource = idToSelect
+          } else {
+            this.selectedSource = this.itemSources[0].value
           }
         }
       })

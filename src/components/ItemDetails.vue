@@ -2,16 +2,29 @@
   <b-card v-if="item"
           bg-variant="dark"
           no-body
-          :header="item.itemName"
-          header-text-variant="primary"
-          header-tag="h3"
           :title="item.itemName"
           :sub-title="item.itemDescription">
+    <template v-slot:header>
+      <div class="d-flex flex-columns justify-content-between">
+        <h3 class="text-primary mb-0">{{ item.itemName }}</h3>
+        <b-button size="sm" variant="outline-danger" v-b-tooltip="'Delete item'" @click="deleteItem"><i class="mdi mdi-delete"/></b-button>
+      </div>
+    </template>
     <b-card-body>
       <b-card-sub-title class="mb-3">{{ item.itemDescription }}</b-card-sub-title>
       <b-card-text v-if="item.typeName"><i class="mdi mdi-tag-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
-      <b-card-text v-if="item.manufacturerName"><i class="mdi mdi-factory" /> {{ item.manufacturerName }}<span v-if="item.manufacturerDescription" class="text-muted"> - {{ item.manufacturerDescription }}</span></b-card-text>
-      <b-card-text v-if="item.sourceName"><i class="mdi mdi-store" /> {{ item.sourceName }}<span v-if="item.sourceDescription" class="text-muted"> - {{ item.sourceDescription }}</span></b-card-text>
+      <b-card-text v-if="item.manufacturerName">
+        <i class="mdi mdi-factory" />&nbsp;
+        <template v-if="item.manufacturerUrl"><a :href="item.manufacturerUrl">{{ item.manufacturerName }}</a> <i class="mdi mdi-open-in-new" /></template>
+        <span v-else>{{ item.manufacturerName }}</span>
+        <span v-if="item.manufacturerDescription" class="text-muted"> - {{ item.manufacturerDescription }}</span>
+      </b-card-text>
+      <b-card-text v-if="item.sourceName">
+        <i class="mdi mdi-store" />&nbsp;
+        <template v-if="item.sourceUrl"><a :href="item.sourceUrl">{{ item.sourceName }}</a> <i class="mdi mdi-open-in-new" /></template>
+        <span v-else>{{ item.sourceName }}</span>
+        <span v-if="item.sourceDescription" class="text-muted"> - {{ item.sourceDescription }}</span>
+      </b-card-text>
     </b-card-body>
 
     <RatingTable :item="item" v-on:rating-changed="$emit('rating-changed')" />
@@ -100,6 +113,21 @@ export default {
           }
         })
       }
+    },
+    deleteItem: function () {
+      this.$bvModal.msgBoxConfirm('Delete item?', {
+        okTitle: 'Yes',
+        cancelTitle: 'No'
+      })
+        .then(value => {
+          if (value === true) {
+            this.apiDeleteItem(this.item.itemId, (result) => {
+              if (result) {
+                this.$emit('item-deleted')
+              }
+            })
+          }
+        })
     },
     deleteImage: function (imageId) {
       this.apiDeleteImage(imageId, {

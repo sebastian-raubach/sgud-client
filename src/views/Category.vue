@@ -6,7 +6,7 @@
     <hr/>
     <b-button :to="{ name: 'category-heatmap', params: { categoryId: category.id } }" class="mb-3">Show item heatmap</b-button>
     <ItemTable :categoryId="category.id" :selected="itemId" v-on:item-selected="(selectedId) => itemId = selectedId" ref="itemTable"/>
-    <ItemDetails v-if="itemId" :itemId="itemId" v-on:rating-changed="$refs.itemTable.refresh()" />
+    <ItemDetails v-if="itemId" :itemId="itemId" v-on:rating-changed="$refs.itemTable.refresh()" v-on:item-deleted="onItemDeleted" />
   </div>
 </template>
 
@@ -24,6 +24,13 @@ export default {
   components: {
     ItemDetails,
     ItemTable
+  },
+  methods: {
+    onItemDeleted: function () {
+      this.itemId = null
+
+      this.$refs.itemTable.refresh()
+    }
   },
   mounted: function () {
     var categoryId = parseInt(this.$route.params.categoryId)
