@@ -42,7 +42,7 @@
       <b-carousel-slide v-for="page in getImagePages()" :key="`image-page-${page}`">
         <template v-slot:img>
           <b-row class="image-carousel-row">
-            <b-col cols=4 v-for="image in getImagesOnPage(page - 1)" :key="`image-${page}-${image.id}`" class="d-flex flex-column px-0 mx-0">
+            <b-col :cols="12 / getImagesOnPage(page - 1).length" v-for="image in getImagesOnPage(page - 1)" :key="`image-${page}-${image.id}`" class="d-flex flex-column px-0 mx-0">
               <a :href="`${baseUrl}image/${image.id}/src?size=ORIGINAL`" class="baguettebox" @click.prevent>
                 <img class="item-image d-block img-fluid w-100" :src="`${baseUrl}image/${image.id}/src?size=MEDIUM`">
               </a>
@@ -139,10 +139,32 @@ export default {
       })
     },
     getImagePages: function () {
-      return Math.ceil(this.images.length / 3)
+      const pageWidth = this.getPageWidth()
+      let imgs
+
+      if (pageWidth >= 992) {
+        imgs = 3
+      } else if (pageWidth >= 768) {
+        imgs = 2
+      } else {
+        imgs = 1
+      }
+
+      return Math.ceil(this.images.length / imgs)
     },
     getImagesOnPage: function (page) {
-      return this.images.slice(page * 3, Math.min(this.images.length, (page + 1) * 3))
+      const pageWidth = this.getPageWidth()
+      let imgs
+
+      if (pageWidth >= 992) {
+        imgs = 3
+      } else if (pageWidth >= 768) {
+        imgs = 2
+      } else {
+        imgs = 1
+      }
+
+      return this.images.slice(page * imgs, Math.min(this.images.length, (page + 1) * imgs))
     },
     updateItem: function (value) {
       const request = {

@@ -8,6 +8,15 @@ export default {
     ])
   },
   methods: {
+    getPageWidth: function () {
+      return Math.max(
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth,
+        document.documentElement.clientWidth
+      )
+    },
     axios ({ url = null, method = 'GET', data = null, formData = null, dataType = 'json', contentType = 'application/json; charset=utf-8', success = null, error = null }) {
       var requestData = null
       var requestParams = null

@@ -147,6 +147,10 @@ $link-color: #bdc3c7;
 @import '~bootswatch/dist/solar/bootswatch';
 @import '~baguettebox.js/dist/baguetteBox.min.css';
 
+body > div {
+  overflow-x: hidden;
+}
+
 .input-group .ui.selection.dropdown {
   position: relative;
   flex: 1 1 0%;

@@ -6,10 +6,10 @@
            @ok="onSubmit">
     <b-form @submit.prevent="onSubmit">
       <b-form-group label-for="name" label="Name">
-        <b-input id="name" v-model="name" />
+        <b-input id="name" v-model="name" placeholder="Rating category name (required)" required />
       </b-form-group>
       <b-form-group label-for="description" label="Description">
-        <b-input id="description" v-model="description" />
+        <b-input id="description" v-model="description" placeholder="Rating category description (optional)" />
       </b-form-group>
     </b-form>
   </b-modal>

@@ -102,6 +102,9 @@ export default {
         this.ratingCategories = result
       })
     },
+    hide: function () {
+      this.$refs.modal.hide()
+    },
     onSubmit: function () {
       if (!this.selectedManufacturer || !this.selectedType || !this.name) {
         return
@@ -126,11 +129,9 @@ export default {
             }
           }).filter(r => r.rating !== null && r.rating !== undefined)
 
-          this.putItemRatings(result, ratings, result => {
+          this.putItemRatings(result, ratings, () => {
             this.$emit('item-added')
-            if (result) {
-              this.$refs.modal.hide()
-            }
+              this.hide()
           })
         }
       })
