@@ -3,7 +3,7 @@
     <b-navbar toggleable="lg" type="dark" variant="dark">
       <b-navbar-brand :to="{ name: 'home' }" class="d-flex align-items-center">
         <img src="./assets/sgud.svg" height="40px" class="d-inline-block align-top" alt="SGUD">
-        SGUD
+        SGUD - 's gud?
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -11,16 +11,13 @@
       <b-collapse id="nav-collapse" is-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-          </b-nav-form>
+          <b-nav-item :to="{ name: 'about' }">About</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <b-container fluid class="mt-3">
       <b-row>
-        <b-col cols="12" md="3">
+        <b-col cols="12" md="3" class="mb-3">
           <b-list-group>
             <b-list-group-item :variant="`${category.id === $route.params.categoryId ? 'primary' : 'default'}`"
                                :class="`d-flex justify-content-between align-items-center ${category.id === $route.params.categoryId ? 'active' : ''}`"
@@ -31,10 +28,10 @@
               <b-badge variant="secondary" pill v-if="!category.count || category.count === 0">0</b-badge>
               <b-badge variant="primary" pill v-else>{{ category.count }}</b-badge>
             </b-list-group-item>
-            <b-list-group-item button variant="dark" @click.prevent v-b-modal.addCategory><i class="mdi mdi-plus"/> Add category</b-list-group-item>
+            <b-list-group-item button @click.prevent v-b-modal.addCategory><i class="mdi mdi-plus"/> Add category</b-list-group-item>
           </b-list-group>
         </b-col>
-        <b-col cols="12" md="9">
+        <b-col cols="12" md="9" class="mb-3">
           <router-view :key="$route.path" />
         </b-col>
       </b-row>

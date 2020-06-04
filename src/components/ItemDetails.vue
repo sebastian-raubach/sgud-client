@@ -7,7 +7,10 @@
     <template v-slot:header>
       <div class="d-flex flex-columns justify-content-between">
         <h3 class="text-primary mb-0">{{ item.itemName }}</h3>
-        <b-button size="sm" variant="outline-danger" v-b-tooltip="'Delete item'" @click="deleteItem"><i class="mdi mdi-delete"/></b-button>
+        <b-button-group>
+          <b-button size="sm" variant="outline-info" v-b-tooltip="'Edit item'" @click="$refs.itemModal.show()"><i class="mdi mdi-pencil"/></b-button>
+          <b-button size="sm" variant="outline-danger" v-b-tooltip="'Delete item'" @click="deleteItem"><i class="mdi mdi-delete"/></b-button>
+        </b-button-group>
       </div>
     </template>
     <b-card-body>
@@ -63,11 +66,13 @@
         drop-placeholder="Drop file here..." />
       <b-button type="submit" @click="uploadImage"><i class="mdi mdi-upload"/> Upload</b-button>
     </b-form>
+    <ItemModal ref="itemModal" :categoryId="item.categoryId" :itemToEdit="item" v-on:item-added="onItemUpdate" />
   </b-card>
 </template>
 
 <script>
 import RatingTable from '@/components/tables/RatingTable'
+import ItemModal from '@/components/modals/ItemModal'
 import baguetteBox from 'baguettebox.js'
 
 export default {
@@ -98,9 +103,14 @@ export default {
     }
   },
   components: {
+    ItemModal,
     RatingTable
   },
   methods: {
+    onItemUpdate: function () {
+      this.$emit('rating-changed')
+      this.updateItem(this.item.itemId)
+    },
     uploadImage: function () {
       if (this.imageFile) {
         let formData = new FormData()

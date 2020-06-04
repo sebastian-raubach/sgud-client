@@ -85,8 +85,6 @@ export default {
 
           if (idToSelect) {
             this.selectedCategory = idToSelect
-          } else {
-            this.selectedCategory = this.ratingCategories[0].value
           }
         }
       })

@@ -2,7 +2,7 @@
   <div>
     <b-modal ref="modal"
             modal-class="item-modal"
-            ok-title="Add"
+            :ok-title="itemToEdit ? 'Update' : 'Add'"
             cancel-title="Cancel"
             title="Add item"
             :size="ratingCategories && ratingCategories.length > 0 ? 'xl' : 'md'"
@@ -66,6 +66,10 @@ export default {
     categoryId: {
       type: Number,
       default: null
+    },
+    itemToEdit: {
+      type: Object,
+      default: null
     }
   },
   data: function () {
@@ -90,17 +94,27 @@ export default {
   },
   methods: {
     show: function () {
-      this.name = null
-      this.description = null
       this.selectedRatings = {}
-      this.$refs.modal.show()
+
+      if (this.itemToEdit) {
+        this.name = this.itemToEdit.itemName
+        this.description = this.itemToEdit.itemDescription
+        this.selectedType = this.itemToEdit.typeId
+        this.selectedManufacturer = this.itemToEdit.manufacturerId
+        this.selectedSource = this.itemToEdit.sourceId
+      } else {
+        this.name = null
+        this.description = null
+
+        this.apiGetRatingCategories(this.categoryId, result => {
+          this.ratingCategories = result
+        })
+      }
+
       this.updateItemTypes()
       this.updateManufacturers()
       this.updateSources()
-
-      this.apiGetRatingCategories(this.categoryId, result => {
-        this.ratingCategories = result
-      })
+      this.$refs.modal.show()
     },
     hide: function () {
       this.$refs.modal.hide()
@@ -119,22 +133,33 @@ export default {
         description: this.description
       }
 
-      this.apiPostItem(item, result => {
-        if (result) {
-          const ratings = this.ratingCategories.map(c => {
-            return {
-              itemId: result,
-              ratingCategoryId: c.id,
-              rating: this.selectedRatings[c.id]
-            }
-          }).filter(r => r.rating !== null && r.rating !== undefined)
+      if (this.itemToEdit) {
+        item.id = this.itemToEdit.itemId
 
-          this.putItemRatings(result, ratings, () => {
+        this.apiPatchItem(item, result => {
+          if (result) {
             this.$emit('item-added')
+            this.hide()
+          }
+        })
+      } else {
+        this.apiPostItem(item, result => {
+          if (result) {
+            const ratings = this.ratingCategories.map(c => {
+              return {
+                itemId: result,
+                ratingCategoryId: c.id,
+                rating: this.selectedRatings[c.id]
+              }
+            }).filter(r => r.rating !== null && r.rating !== undefined)
+
+            this.putItemRatings(result, ratings, () => {
+              this.$emit('item-added')
               this.hide()
-          })
-        }
-      })
+            })
+          }
+        })
+      }
     },
     updateManufacturers: function (idToSelect) {
       this.apiGetManufacturers(result => {
@@ -148,8 +173,6 @@ export default {
 
           if (idToSelect) {
             this.selectedManufacturer = idToSelect
-          } else {
-            this.selectedManufacturer = this.itemManufacturers[0].value
           }
         }
       })
@@ -166,8 +189,6 @@ export default {
 
           if (idToSelect) {
             this.selectedSource = idToSelect
-          } else {
-            this.selectedSource = this.itemSources[0].value
           }
         }
       })
@@ -184,8 +205,6 @@ export default {
 
           if (idToSelect) {
             this.selectedType = idToSelect
-          } else {
-            this.selectedType = this.itemTypes[0].value
           }
         }
       })

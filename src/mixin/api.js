@@ -13,6 +13,9 @@ export default {
       query.page--
       return this.axios({ url: 'item', method: 'POST', data: query, success: onSuccess, error: onError })
     },
+    apiPatchItem: function (item, onSuccess, onError) {
+      return this.axios({ url: `item/${item.id}`, method: 'PATCH', data: item, success: onSuccess, error: onError })
+    },
     apiPostItemView: function (itemId, query, onSuccess, onError) {
       query.page--
       return this.axios({ url: `item/${itemId}`, method: 'POST', data: query, success: onSuccess, error: onError })
@@ -39,6 +42,9 @@ export default {
     },
     apiGetRatingHeatmap: function (categoryId, onSuccess, onError) {
       return this.axios({ url: `category/${categoryId}/heatmap`, method: 'GET', success: onSuccess, error: onError })
+    },
+    apiGetCategoryStats: function (categoryId, onSuccess, onError) {
+      return this.axios({ url: `category/${categoryId}/stats`, method: 'GET', success: onSuccess, error: onError })
     },
     putItemRating: function (rating, onSuccess, onError) {
       return this.axios({ url: `item/${rating.itemId}/rating/${rating.ratingCategoryId}`, method: 'PUT', data: rating, success: onSuccess, error: onError })
