@@ -30,7 +30,8 @@ export default {
       months: monthInts.map(i => {
         return moment().subtract(i, 'month').format('MMMM')
       }),
-      chartData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      chartData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      maxValue: 0
     }
   },
   watch: {
@@ -43,6 +44,7 @@ export default {
   },
   methods: {
     updateStats: function () {
+      this.maxValue = 0
       this.apiGetCategoryStats(this.category.id, result => {
         if (result) {
           result.forEach(c => {
@@ -50,6 +52,7 @@ export default {
             const now = moment()
             const monthDiff = now.diff(date, 'months')
             this.chartData[11 - monthDiff] = c.count
+            this.maxValue = Math.max(this.maxValue, c.max)
           })
         }
 
@@ -79,6 +82,11 @@ export default {
             scales: {
               yAxes: [{
                 display: false,
+                ticks: {
+                  suggestedMin: 0,
+                  beginAtZero: true,
+                  suggestedMax: this.maxValue
+                }
               }],
               xAxes: [{
                 display: false
