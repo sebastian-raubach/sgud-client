@@ -75,6 +75,8 @@ import RatingTable from '@/components/tables/RatingTable'
 import ItemModal from '@/components/modals/ItemModal'
 import baguetteBox from 'baguettebox.js'
 
+import { EventBus } from '@/event-bus.js'
+
 export default {
   props: {
     itemId: {
@@ -113,10 +115,12 @@ export default {
     },
     uploadImage: function () {
       if (this.imageFile) {
+        EventBus.$emit('show-loading', true)
         let formData = new FormData()
         formData.append('imageFile', this.imageFile)
 
         this.apiPostItemImage(this.item.itemId, formData, result => {
+          EventBus.$emit('show-loading', false)
           if (result) {
             this.updateImages()
             this.imageFile = null

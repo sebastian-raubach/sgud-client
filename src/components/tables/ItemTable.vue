@@ -85,11 +85,17 @@ export default {
       }
     }
   },
+  watch: {
+    'pagination.currentPage': function () {
+      this.$refs.table.refresh()
+    }
+  },
   components: {
     ItemModal
   },
   methods: {
     onItemAdded: function () {
+      this.pagination.totalCount = -1
       this.$refs.table.refresh()
       EventBus.$emit('item-added')
     },

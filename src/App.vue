@@ -60,6 +60,11 @@
         </b-form-group>
       </b-form>
     </b-modal>
+    <b-modal ref="loadingModal" title="Loading" hide-footer no-close-on-backdrop no-close-on-esc hide-header-close>
+      <div class="text-center">
+        <b-spinner style="width: 3rem; height: 3rem;" variant="primary" type="grow" />
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -116,15 +121,24 @@ export default {
       this.apiGetCategories(result => {
         this.categories = result
       })
+    },
+    toggleLoading: function (show) {
+      if (show) {
+        this.$refs.loadingModal.show()
+      } else {
+        this.$refs.loadingModal.hide()
+      }
     }
   },
   destroyed: function () {
     EventBus.$off('item-added', this.updateCategories)
+    EventBus.$off('show-loading', this.toggleLoading)
   },
   mounted: function () {
     this.updateCategories()
 
     EventBus.$on('item-added', this.updateCategories)
+    EventBus.$on('show-loading', this.toggleLoading)
   }
 }
 </script>
