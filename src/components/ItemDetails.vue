@@ -15,7 +15,11 @@
     </template>
     <b-card-body>
       <b-card-sub-title class="mb-3">{{ item.itemDescription }}</b-card-sub-title>
-      <b-card-text v-if="item.typeName"><i class="mdi mdi-tag-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
+      <b-card-text v-if="item.typeName"><i class="mdi mdi-tooltip-text-outline" /> {{ item.typeName }}<span v-if="item.typeDescription" class="text-muted"> - {{ item.typeDescription }}</span></b-card-text>
+      <b-card-text v-if="item.itemTags">
+        <i class="mdi mdi-tag-multiple-outline" />
+        <b-badge v-for="(tag, index) in item.itemTags" :key="`${item.itemId}-${index}`" class="mx-1">{{ tag }}</b-badge>
+      </b-card-text>
       <b-card-text v-if="item.manufacturerName">
         <i class="mdi mdi-factory" />&nbsp;
         <template v-if="item.manufacturerUrl"><a :href="item.manufacturerUrl">{{ item.manufacturerName }}</a> <i class="mdi mdi-open-in-new" /></template>

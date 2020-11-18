@@ -19,6 +19,11 @@
       <template v-slot:cell(typeName)="data">
         {{ data.item.typeName }} <i :class="`mdi ${data.item.typeIcon}`" v-if="data.item.typeIcon" />
       </template>
+      <template v-slot:cell(itemTags)="data">
+        <div v-if="data.item.itemTags">
+          <b-badge v-for="(tag, index) in data.item.itemTags" :key="`${data.item.itemId}-${index}`" class="mr-2">{{ tag }}</b-badge>
+        </div>
+      </template>
       <template v-slot:cell(manufacturerName)="data">
         <span v-if="data.item.manufacturerUrl"><a :href="data.item.manufacturerUrl">{{ data.item.manufacturerName }}</a> <i class="mdi mdi-open-in-new" /></span>
         <span v-else>{{ data.item.manufacturerName }}</span>
@@ -67,6 +72,10 @@ export default {
         key: 'typeName',
         label: 'Type',
         sortable: true
+      }, {
+        key: 'itemTags',
+        label: 'Tags',
+        sortable: false
       }, {
         key: 'manufacturerName',
         label: 'Manufacturer',

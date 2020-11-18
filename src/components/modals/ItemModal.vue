@@ -16,6 +16,9 @@
             <b-form-group label-for="description" label="Item description">
               <b-form-input v-model="description" id="description" />
             </b-form-group>
+            <b-form-group label-for="itemTags" label="Item tags">
+              <b-form-input v-model="itemTags" id="itemTags" />
+            </b-form-group>
             <b-form-group label-for="type" label="Item type">
               <b-input-group>
                 <template v-slot:append>
@@ -76,6 +79,7 @@ export default {
     return {
       name: null,
       description: null,
+      itemTags: null,
       itemTypes: [],
       selectedType: null,
       itemManufacturers: [],
@@ -102,6 +106,7 @@ export default {
         this.selectedType = this.itemToEdit.typeId
         this.selectedManufacturer = this.itemToEdit.manufacturerId
         this.selectedSource = this.itemToEdit.sourceId
+        this.itemTags = this.itemToEdit.itemTags ? this.itemToEdit.itemTags.join(", ") : null
       } else {
         this.name = null
         this.description = null
@@ -124,12 +129,18 @@ export default {
         return
       }
 
+      let tags = null
+      if (this.itemTags) {
+        tags = this.itemTags.split(",").map(t => t.trim()).filter(t => t.length > 0)
+      }
+
       const item = {
         categoryId: this.categoryId,
         sourceId: this.selectedSource,
         typeId: this.selectedType,
         manufacturerId: this.selectedManufacturer,
         name: this.name,
+        tags: tags,
         description: this.description
       }
 
