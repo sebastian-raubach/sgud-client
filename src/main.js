@@ -13,7 +13,7 @@ Vue.mixin(mixin)
 Vue.mixin(api)
 
 // Set base URL
-var baseUrl = 'http://localhost:8080/sgud/v1.0.0/api/'
+var baseUrl = './'
 
 if (process.env.VUE_APP_BASE_URL) {
   baseUrl = process.env.VUE_APP_BASE_URL

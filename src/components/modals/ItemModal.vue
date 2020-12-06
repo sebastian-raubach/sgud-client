@@ -144,6 +144,10 @@ export default {
         description: this.description
       }
 
+      if (!item.tags) {
+        delete item.tags
+      }
+
       if (this.itemToEdit) {
         item.id = this.itemToEdit.itemId
 
