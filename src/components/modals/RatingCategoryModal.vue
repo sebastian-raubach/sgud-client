@@ -4,12 +4,15 @@
            ok-title="Add"
            cancel-title="Cancel"
            @ok="onSubmit">
-    <b-form @submit.prevent="onSubmit">
+    <b-form @submit.prevent="onSubmit" autocomplete="off">
       <b-form-group label-for="name" label="Name">
         <b-input id="name" v-model="name" placeholder="Rating category name (required)" required />
       </b-form-group>
       <b-form-group label-for="description" label="Description">
         <b-input id="description" v-model="description" placeholder="Rating category description (optional)" />
+      </b-form-group>
+      <b-form-group label-for="counts" label="Counts towards rating average?">
+        <b-form-checkbox switch v-model="counts" size="lg" placeholder="Rating category counts towards average (required)">{{ counts ? 'Yes' : 'No' }}</b-form-checkbox>
       </b-form-group>
     </b-form>
   </b-modal>
@@ -20,7 +23,8 @@ export default {
   data: function () {
     return {
       name: null,
-      description: null
+      description: null,
+      counts: true
     }
   },
   methods: {
@@ -31,7 +35,8 @@ export default {
       if (this.name) {
         this.$emit('category-added', {
           name: this.name,
-          description: this.description
+          description: this.description,
+          includeInAverage: this.counts
         })
       }
 

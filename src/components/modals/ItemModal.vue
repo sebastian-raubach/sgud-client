@@ -7,7 +7,7 @@
             title="Add item"
             :size="ratingCategories && ratingCategories.length > 0 ? 'xl' : 'md'"
             @ok.prevent="onSubmit">
-      <b-form @submit.prevent="onSubmit">
+      <b-form @submit.prevent="onSubmit" autocomplete="off">
         <b-row>
           <b-col cols="12" :md="ratingCategories && ratingCategories.length > 0 ? '6' : '12'">
             <b-form-group label-for="name" label="Item name">

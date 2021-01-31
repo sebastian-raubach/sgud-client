@@ -4,7 +4,7 @@
            ok-title="Add"
            cancel-title="Cancel"
            @ok="onSubmit">
-    <b-form @submit.prevent="onSubmit" :validated="formValidated">
+    <b-form @submit.prevent="onSubmit" :validated="formValidated" autocomplete="off">
       <b-form-group label-for="name" label="Manufacturer name">
         <b-form-input v-model="name" id="name" :state="formState.name" placeholder="Manufacturer name (required)" required />
       </b-form-group>

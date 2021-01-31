@@ -6,7 +6,7 @@
              cancel-title="Cancel"
              title="Add rating"
              @ok="onSubmit">
-      <b-form @submit.prevent="onSubmit">
+      <b-form @submit.prevent="onSubmit" autocomplete="off">
         <b-form-group label-for="category" label="Rating category">
           <b-input-group>
             <template v-slot:append>

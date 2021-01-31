@@ -6,6 +6,8 @@
              dark
              show-empty
              table-variant="dark"
+             sort-by="itemCreatedOn"
+             :sort-desc="true"
              sort-icon-left
              class="mb-0"
              @row-clicked="onRowClicked"
