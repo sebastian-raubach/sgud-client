@@ -20,17 +20,14 @@ RUN rm -f .env && \
     npm i && \
     npm run build && \
     mkdir /opt/sgud-server/client/ && \
-    cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/ && \
-    echo "config.path=/data/sgud/" > /opt/sgud-server/config.properties && \
-    echo "project.name=sgud" > /opt/sgud-server/gradle.properties
-
-# Copy a configuration for the server
-COPY build.properties /opt/sgud-server/build.properties
+    cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/
 
 # Download Gradle and build the server code
 RUN apk add --no-cache openjdk11 && \
     wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip -P /tmp/ && \
     unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
+    echo "config.path=/data/sgud/" > /opt/sgud-server/config.properties && \
+    echo "project.name=sgud" > /opt/sgud-server/gradle.properties && \
     /opt/gradle-6.0.1/bin/gradle -p /opt/sgud-server war
 
 
