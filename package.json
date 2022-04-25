@@ -1,6 +1,6 @@
 {
   "name": "sgud-client",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,29 +9,35 @@
   },
   "dependencies": {
     "@mdi/font": "^5.1.45",
-    "axios": "^0.19.2",
+    "axios": "^0.26.1",
     "baguettebox.js": "^1.11.1",
-    "bootstrap-vue": "^2.13.1",
-    "bootswatch": "^4.4.1",
-    "chart.js": "^2.9.3",
-    "core-js": "^3.6.4",
+    "bootstrap": "^4.6.1",
+    "bootstrap-vue": "^2.22.0",
+    "bootswatch": "^4.6.1",
+    "chart.js": "^2.9.4",
+    "core-js": "^3.8.3",
     "rainbowvis.js": "^1.0.1",
-    "vue": "^2.6.11",
-    "vue-router": "^3.1.6",
-    "vue-search-select": "^2.9.3",
-    "vuex": "^3.3.0",
-    "vuex-persistedstate": "^3.0.1"
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.1",
+    "vue-typeahead-bootstrap": "^2.12.0",
+    "vuex": "^3.6.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.3.0",
-    "@vue/cli-plugin-eslint": "^4.3.0",
-    "@vue/cli-service": "^4.3.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "^5.0.4",
+    "@vue/cli-plugin-eslint": "^5.0.4",
+    "@vue/cli-service": "^5.0.4",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "sass": "^1.32.13",
+    "sass-loader": "^12.0.0",
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
@@ -40,12 +46,22 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "@vue/standard"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "no-new": "off",
+      "vue/no-mutating-props": "off",
+      "vue/multi-word-component-names": 0,
+      "vue/valid-v-slot": [
+        "error",
+        {
+          "allowModifiers": true
+        }
+      ]
+    }
   },
   "browserslist": [
     "> 1%",

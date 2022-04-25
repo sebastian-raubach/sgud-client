@@ -155,6 +155,7 @@ $link-color: #bdc3c7;
 
 @import '~bootswatch/dist/solar/variables';
 @import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-vue/src/index.scss';
 @import '~bootswatch/dist/solar/bootswatch';
 @import '~baguettebox.js/dist/baguetteBox.min.css';
 
@@ -179,6 +180,10 @@ body > div {
 .input-group .ui.selection.dropdown:not(:first-child) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.vbt-autcomplete-list a {
+  background-color: #073642;
 }
 
 .modal.fade .modal-dialog {

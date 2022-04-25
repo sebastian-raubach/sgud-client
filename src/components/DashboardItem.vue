@@ -64,14 +64,14 @@ export default {
         new Chart(this.$refs.chartCanvas.getContext('2d'), {
           type: 'bar',
           data: {
-              labels: this.months,
-              datasets: [{
-                  backgroundColor: 'rgba(255,255,255,0.3)',
-                  borderColor: 'rgba(255,255,255,0.3)',
-                  hoverBackgroundColor: 'rgba(255,255,255,0.3)',
-                  hoverBorderColor: 'rgba(255,255,255,0.3)',
-                  data: this.chartData
-              }]
+            labels: this.months,
+            datasets: [{
+              backgroundColor: 'rgba(255,255,255,0.3)',
+              borderColor: 'rgba(255,255,255,0.3)',
+              hoverBackgroundColor: 'rgba(255,255,255,0.3)',
+              hoverBorderColor: 'rgba(255,255,255,0.3)',
+              data: this.chartData
+            }]
           },
           options: {
             responsive: true,

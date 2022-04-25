@@ -18,9 +18,9 @@ export default {
       )
     },
     axios ({ url = null, method = 'GET', data = null, formData = null, dataType = 'json', contentType = 'application/json; charset=utf-8', success = null, error = null }) {
-      var requestData = null
-      var requestParams = null
-  
+      let requestData = null
+      let requestParams = null
+
       // Stringify the data object for non-GET requests
       if (data !== null || data !== undefined) {
         if (method === 'GET') {
@@ -30,7 +30,7 @@ export default {
         }
       }
 
-      var promise
+      let promise
 
       if (formData) {
         promise = axios.post(url, formData, {
@@ -53,7 +53,7 @@ export default {
           }
         })
       }
-  
+
       promise.then(result => {
         if (success) {
           if (dataType === 'blob' && result.headers && result.headers['content-disposition']) {
@@ -62,16 +62,16 @@ export default {
               .map(p => p.trim())
               .filter(p => p.indexOf('filename') === 0)
               .map(p => p.replace('filename=', ''))
-  
+
             if (filename && filename.length > 0) {
               result.data.filename = filename[0]
             }
           }
-  
+
           success(result.data)
         }
       })
-  
+
       promise.catch(err => {
         if (err.response) {
           // The request was made and the server responded with a status code that falls out of the range of 2xx
@@ -97,10 +97,10 @@ export default {
             console.error(err)
           }
         }
-  
+
         throw err
       })
-  
+
       return promise
     }
   }

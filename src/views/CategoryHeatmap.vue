@@ -17,7 +17,7 @@ export default {
     ItemHeatmapTable
   },
   mounted: function () {
-    var categoryId = this.$route.params.categoryId
+    const categoryId = this.$route.params.categoryId
 
     this.apiGetCategory(categoryId, result => {
       if (result && result.length > 0) {

@@ -110,7 +110,7 @@ export default {
     },
     getData: function (ctx) {
       // Set the API pagination information fields
-      var localCtx = JSON.parse(JSON.stringify(ctx))
+      const localCtx = JSON.parse(JSON.stringify(ctx))
       localCtx.page = this.pagination.currentPage
       localCtx.limit = this.pagination.perPage
       localCtx.prevCount = this.pagination.totalCount
@@ -126,7 +126,7 @@ export default {
 
       return new Promise((resolve) => {
         this.apiPostItemRatings(this.item.itemId, localCtx).then(result => {
-          var localResult = null
+          let localResult = null
           if (result && result.data && result.data.data) {
             this.pagination.totalCount = result.data.count
             localResult = result.data.data

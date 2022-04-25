@@ -56,7 +56,10 @@ export default {
 
       this.apiPostManufacturer(query, result => {
         if (result) {
-          this.$emit('manufacturer-added', result)
+          this.$emit('manufacturer-added', {
+            id: result,
+            name: this.name
+          })
           this.$refs.modal.hide()
         }
       })

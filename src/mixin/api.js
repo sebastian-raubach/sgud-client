@@ -65,7 +65,7 @@ export default {
       return this.axios({ url: `image/${imageId}`, method: 'DELETE', data: image, success: onSuccess, error: onError })
     },
     apiPostItemImage: function (itemId, formData, onSuccess, onError) {
-      return this.axios({ url: `item/${itemId}/image`, method: 'POST', formData: formData, success: onSuccess, error: onError })
+      return this.axios({ url: `item/${itemId}/image/upload`, method: 'POST', formData: formData, success: onSuccess, error: onError })
     },
     apiGetItemType: function (categoryId, onSuccess, onError) {
       return this.axios({ url: `category/${categoryId}/type`, method: 'GET', success: onSuccess, error: onError })

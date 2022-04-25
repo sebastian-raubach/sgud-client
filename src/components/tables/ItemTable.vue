@@ -1,5 +1,8 @@
 <template>
   <div v-if="categoryId" class="item-table">
+    <b-form-group label="Filter" label-for="search" >
+      <b-input id="search" type="search" :debounce="500" placeholder="Search" v-model="filter" />
+    </b-form-group>
     <b-table striped
              responsive
              hover
@@ -63,6 +66,7 @@ export default {
   data: function () {
     return {
       selectedItemId: null,
+      filter: null,
       fields: [{
         key: 'selected',
         label: ''
@@ -88,7 +92,6 @@ export default {
         class: 'text-right',
         sortable: true
       }],
-      filter: [],
       pagination: {
         currentPage: 1,
         perPage: 10,
@@ -99,6 +102,9 @@ export default {
   watch: {
     'pagination.currentPage': function () {
       this.$refs.table.refresh()
+    },
+    filter: function () {
+      this.refresh()
     }
   },
   components: {
@@ -126,13 +132,46 @@ export default {
     },
     getData: function (ctx) {
       // Set the API pagination information fields
-      var localCtx = JSON.parse(JSON.stringify(ctx))
+      const localCtx = JSON.parse(JSON.stringify(ctx))
       localCtx.page = this.pagination.currentPage
       localCtx.limit = this.pagination.perPage
       localCtx.prevCount = this.pagination.totalCount
       localCtx.orderBy = localCtx.sortBy.length > 0 ? localCtx.sortBy : null
       localCtx.ascending = localCtx.sortBy.length > 0 ? (localCtx.sortDesc ? 0 : 1) : null
-      localCtx.filter = this.filter
+      if (this.filter) {
+        localCtx.prevCount = -1
+        localCtx.filter = [{
+          column: 'itemName',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }, {
+          column: 'itemDescription',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }, {
+          column: 'manufacturerName',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }, {
+          column: 'manufacturerDescription',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }, {
+          column: 'typeName',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }, {
+          column: 'typeDescription',
+          comparator: 'contains',
+          operator: 'or',
+          values: [this.filter]
+        }]
+      }
       // Delete fields that the bootstrap-vue table sets itself
       delete localCtx.sortBy
       delete localCtx.sortDesc
@@ -142,7 +181,7 @@ export default {
 
       return new Promise((resolve) => {
         this.apiPostCategoryItems(this.categoryId, localCtx).then(result => {
-          var localResult = null
+          let localResult = null
           if (result && result.data && result.data.data) {
             this.pagination.totalCount = result.data.count
             localResult = result.data.data

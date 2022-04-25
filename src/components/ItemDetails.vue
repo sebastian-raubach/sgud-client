@@ -90,7 +90,7 @@ export default {
   },
   watch: {
     itemId: {
-      immediate: true, 
+      immediate: true,
       handler: function (newValue) {
         this.updateItem(newValue)
       }
@@ -120,7 +120,7 @@ export default {
     uploadImage: function () {
       if (this.imageFile) {
         EventBus.$emit('show-loading', true)
-        let formData = new FormData()
+        const formData = new FormData()
         formData.append('imageFile', this.imageFile)
 
         this.apiPostItemImage(this.item.itemId, formData, result => {

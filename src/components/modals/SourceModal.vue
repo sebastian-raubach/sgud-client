@@ -56,7 +56,10 @@ export default {
 
       this.apiPostSource(query, result => {
         if (result) {
-          this.$emit('source-added', result)
+          this.$emit('source-added', {
+            id: result,
+            name: this.name
+          })
           this.$refs.modal.hide()
         }
       })

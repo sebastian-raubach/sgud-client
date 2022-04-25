@@ -33,7 +33,7 @@ export default {
     }
   },
   mounted: function () {
-    var categoryId = parseInt(this.$route.params.categoryId)
+    const categoryId = parseInt(this.$route.params.categoryId)
     this.itemId = parseInt(this.$route.params.itemId)
 
     this.apiGetCategory(categoryId, result => {

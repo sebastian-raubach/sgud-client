@@ -20,28 +20,25 @@
               <b-form-input v-model="itemTags" id="itemTags" />
             </b-form-group>
             <b-form-group label-for="type" label="Item type">
-              <b-input-group>
-                <template v-slot:append>
+              <VueTypeaheadBootstrap id="type" showOnFocus v-model="selectedTypeTemp" @hit="$event => { selectedType = $event.value }" :data="itemTypes" required :serializer="item => item.text">
+                <template slot="append">
                   <b-button @click="$refs.itemTypeModal.show()" v-b-tooltip="'Add new item type.'"><i class="mdi mdi-plus" /></b-button>
                 </template>
-                <ModelSelect id="type" v-model="selectedType" :options="itemTypes" required />
-              </b-input-group>
+              </VueTypeaheadBootstrap>
             </b-form-group>
             <b-form-group label-for="manufacturer" label="Item manufacturer">
-              <b-input-group>
-                <template v-slot:append>
+              <VueTypeaheadBootstrap id="manufacturer" showOnFocus v-model="selectedManufacturerTemp" @hit="$event => { selectedManufacturer = $event.value }" :data="itemManufacturers" required :serializer="item => item.text">
+                <template slot="append">
                   <b-button @click="$refs.manufacturerModal.show()" v-b-tooltip="'Add new item manufacturer.'"><i class="mdi mdi-plus" /></b-button>
                 </template>
-                <ModelSelect id="manufacturer" v-model="selectedManufacturer" :options="itemManufacturers" required />
-              </b-input-group>
+              </VueTypeaheadBootstrap>
             </b-form-group>
             <b-form-group label-for="source" label="Item source">
-              <b-input-group>
-                <template v-slot:append>
+              <VueTypeaheadBootstrap id="source" showOnFocus v-model="selectedSourceTemp" @hit="$event => { selectedSource = $event.value }" :data="itemSources" required :serializer="item => item.text">
+                <template slot="append">
                   <b-button @click="$refs.sourceModal.show()" v-b-tooltip="'Add new item source.'"><i class="mdi mdi-plus" /></b-button>
                 </template>
-                <ModelSelect id="source" v-model="selectedSource" :options="itemSources" required />
-              </b-input-group>
+              </VueTypeaheadBootstrap>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="6" v-if="ratingCategories && ratingCategories.length > 0">
@@ -62,7 +59,7 @@
 import ItemTypeModal from '@/components/modals/ItemTypeModal'
 import ManufacturerModal from '@/components/modals/ManufacturerModal'
 import SourceModal from '@/components/modals/SourceModal'
-import { ModelSelect } from 'vue-search-select'
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 
 export default {
   props: {
@@ -82,17 +79,20 @@ export default {
       itemTags: null,
       itemTypes: [],
       selectedType: null,
+      selectedTypeTemp: null,
       itemManufacturers: [],
       selectedManufacturer: null,
+      selectedManufacturerTemp: null,
       ratingCategories: [],
       selectedRatings: {},
       itemSources: [],
-      selectedSource: null
+      selectedSource: null,
+      selectedSourceTemp: null
     }
   },
   components: {
     ItemTypeModal,
-    ModelSelect,
+    VueTypeaheadBootstrap,
     ManufacturerModal,
     SourceModal
   },
@@ -104,9 +104,12 @@ export default {
         this.name = this.itemToEdit.itemName
         this.description = this.itemToEdit.itemDescription
         this.selectedType = this.itemToEdit.typeId
+        this.selectedTypeTemp = this.itemToEdit.typeName
         this.selectedManufacturer = this.itemToEdit.manufacturerId
+        this.selectedManufacturerTemp = this.itemToEdit.manufacturerName
         this.selectedSource = this.itemToEdit.sourceId
-        this.itemTags = this.itemToEdit.itemTags ? this.itemToEdit.itemTags.join(", ") : null
+        this.selectedSourceTemp = this.itemToEdit.sourceName
+        this.itemTags = this.itemToEdit.itemTags ? this.itemToEdit.itemTags.join(', ') : null
       } else {
         this.name = null
         this.description = null
@@ -131,7 +134,7 @@ export default {
 
       let tags = null
       if (this.itemTags) {
-        tags = this.itemTags.split(",").map(t => t.trim()).filter(t => t.length > 0)
+        tags = this.itemTags.split(',').map(t => t.trim()).filter(t => t.length > 0)
       }
 
       const item = {
@@ -187,7 +190,8 @@ export default {
           })
 
           if (idToSelect) {
-            this.selectedManufacturer = idToSelect
+            this.selectedManufacturer = idToSelect.id
+            this.selectedManufacturerTemp = idToSelect.name
           }
         }
       })
@@ -203,7 +207,8 @@ export default {
           })
 
           if (idToSelect) {
-            this.selectedSource = idToSelect
+            this.selectedSource = idToSelect.id
+            this.selectedSourceTemp = idToSelect.name
           }
         }
       })
@@ -219,7 +224,8 @@ export default {
           })
 
           if (idToSelect) {
-            this.selectedType = idToSelect
+            this.selectedType = idToSelect.id
+            this.selectedTypeTemp = idToSelect.name
           }
         }
       })

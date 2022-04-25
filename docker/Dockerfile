@@ -20,25 +20,27 @@ RUN rm -f .env && \
     npm i && \
     npm run build && \
     mkdir /opt/sgud-server/client/ && \
-    cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/
+    cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/ && \
+    echo "config.path=/data/sgud/" > /opt/sgud-server/config.properties && \
+    echo "project.name=sgud" > /opt/sgud-server/gradle.properties
 
-# Download Ant and build the server code
-RUN apk add --no-cache openjdk8 && \
+# Copy a configuration for the server
+COPY build.properties /opt/sgud-server/build.properties
+
+# Download Gradle and build the server code
+RUN apk add --no-cache openjdk11 && \
     wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip -P /tmp/ && \
     unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
-    echo "config.path=/data/sgud/" > /opt/sgud-server/config.properties && \
-    echo "project.name=sgud" > /opt/sgud-server/gradle.properties && \
     /opt/gradle-6.0.1/bin/gradle -p /opt/sgud-server war
 
 
-
-FROM tomcat:8-jdk8
+FROM tomcat:10-jdk11
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
 RUN mkdir -p /usr/local/tomcat/webapps && \
     rm -rf /usr/local/tomcat/webapps/ROOT
 
-COPY --from=builder /opt/sgud-server/build/libs/sgud-server-*.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /opt/sgud-server/build/libs/sgud-*.war /usr/local/tomcat/webapps/ROOT.war
 
 WORKDIR /usr/local/tomcat/

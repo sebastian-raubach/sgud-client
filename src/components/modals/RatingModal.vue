@@ -8,12 +8,11 @@
              @ok="onSubmit">
       <b-form @submit.prevent="onSubmit" autocomplete="off">
         <b-form-group label-for="category" label="Rating category">
-          <b-input-group>
-            <template v-slot:append>
+          <VueTypeaheadBootstrap id="category" showOnFocus v-model="selectedCategoryTemp" @hit="$event => { selectedCategory = $event.value }" :data="ratingCategories" :serializer="item => item.text">
+            <template slot="append">
               <b-button @click="$refs.categoryModal.show()" v-b-tooltip="'Add new rating category.'"><i class="mdi mdi-plus" /></b-button>
             </template>
-            <ModelSelect id="category" v-model="selectedCategory" :options="ratingCategories" />
-          </b-input-group>
+          </VueTypeaheadBootstrap>
           <b-form-rating v-model="rating" no-border />
         </b-form-group>
       </b-form>
@@ -23,7 +22,7 @@
 </template>
 
 <script>
-import { ModelSelect } from 'vue-search-select'
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap'
 import RatingCategoryModal from '@/components/modals/RatingCategoryModal'
 
 export default {
@@ -36,12 +35,13 @@ export default {
   data: function () {
     return {
       selectedCategory: null,
+      selectedCategoryTemp: null,
       ratingCategories: [],
       rating: null
     }
   },
   components: {
-    ModelSelect,
+    VueTypeaheadBootstrap,
     RatingCategoryModal
   },
   methods: {
@@ -52,6 +52,7 @@ export default {
         description: category.description
       }, result => {
         if (result) {
+          this.selectedCategoryTemp = category.name
           this.updateCategories(result)
         }
       })
@@ -59,6 +60,7 @@ export default {
     show: function () {
       this.rating = null
       this.selectedCategory = null
+      this.selectedCategoryTemp = null
       this.ratingCategories = []
       this.updateCategories()
       this.$refs.modal.show()
@@ -70,7 +72,7 @@ export default {
           rating: this.rating
         })
       }
-      
+
       this.$refs.modal.hide()
     },
     updateCategories: function (idToSelect) {

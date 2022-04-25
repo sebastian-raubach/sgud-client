@@ -73,7 +73,10 @@ export default {
 
       this.apiPostItemType(query, result => {
         if (result) {
-          this.$emit('item-type-added', result)
+          this.$emit('item-type-added', {
+            id: result,
+            name: this.name
+          })
           this.$refs.modal.hide()
         }
       })
