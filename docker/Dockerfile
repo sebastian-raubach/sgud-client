@@ -1,4 +1,4 @@
-FROM node:12-alpine3.10 AS builder
+FROM node:20-alpine3.17 AS builder
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
@@ -31,7 +31,7 @@ RUN apk add --no-cache openjdk11 && \
     /opt/gradle-6.0.1/bin/gradle -p /opt/sgud-server war
 
 
-FROM tomcat:10-jdk11
+FROM tomcat:10.1-jdk11
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
