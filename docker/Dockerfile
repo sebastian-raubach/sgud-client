@@ -17,7 +17,7 @@ WORKDIR /opt/sgud-client
 RUN rm -f .env && \
     echo "VUE_APP_BASE_URL=./api/" > .env && \
     apk add --no-cache python3 build-base gcc wget && \
-    npm i && \
+    npm i --legacy-peer-deps && \
     npm run build && \
     mkdir /opt/sgud-server/client/ && \
     cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/
