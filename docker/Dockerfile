@@ -1,4 +1,4 @@
-FROM node:20-alpine3.17 AS builder
+FROM node:22.11-alpine3.20 AS builder
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
@@ -23,15 +23,15 @@ RUN rm -f .env && \
     cp -a /opt/sgud-client/dist/. /opt/sgud-server/client/
 
 # Download Gradle and build the server code
-RUN apk add --no-cache openjdk11 && \
-    wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip -P /tmp/ && \
-    unzip /tmp/gradle-6.0.1-bin.zip -d /opt/ && \
+RUN apk add --no-cache openjdk21 && \
+    wget https://services.gradle.org/distributions/gradle-8.8-bin.zip -P /tmp/ && \
+    unzip /tmp/gradle-8.8-bin.zip -d /opt/ && \
     echo "config.path=/data/sgud/" > /opt/sgud-server/config.properties && \
     echo "project.name=sgud" > /opt/sgud-server/gradle.properties && \
-    /opt/gradle-6.0.1/bin/gradle -p /opt/sgud-server war
+    /opt/gradle-8.8/bin/gradle -p /opt/sgud-server war
 
 
-FROM tomcat:10.1-jdk11
+FROM tomcat:10.1-jdk21
 
 LABEL maintainer="sebastian@raubach.co.uk"
 
